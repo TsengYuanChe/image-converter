@@ -1,83 +1,139 @@
-from pathlib import Path
+# Image Converter
 
-from PIL import Image
+A lightweight Python tool for batch image conversion.
 
-# ==========================
-# Settings
-# ==========================
+## Features
 
-SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+- Batch convert images to WebP
+- Support JPG, JPEG and PNG
+- Preserve image quality
+- Easy to use with `before/` and `after/` folders
 
-QUALITY = 90
-LOSSLESS = False
+---
 
-BEFORE_DIR = Path("before")
-AFTER_DIR = Path("after")
+## Requirements
 
+- Python 3.11+
 
-def convert_to_webp(image_path: Path) -> bool:
-    """Convert a single image to WebP."""
+---
 
-    output_path = AFTER_DIR / f"{image_path.stem}.webp"
+## Project Structure
 
-    with Image.open(image_path) as image:
-        image.save(
-            output_path,
-            "WEBP",
-            quality=QUALITY,
-            lossless=LOSSLESS,
-        )
+```text
+image-converter/
+│
+├── before/
+├── after/
+│
+├── common.py
+├── to_webp.py
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
 
-    return True
+---
 
+## Create Virtual Environment
 
-def main():
+### Windows
 
-    print("=" * 40)
-    print("Image Converter - WebP")
-    print("=" * 40)
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
 
-    BEFORE_DIR.mkdir(exist_ok=True)
-    AFTER_DIR.mkdir(exist_ok=True)
+### macOS / Linux
 
-    images = [
-        file
-        for file in BEFORE_DIR.iterdir()
-        if file.suffix.lower() in SUPPORTED_EXTENSIONS
-    ]
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-    if not images:
-        print("No supported images found.")
-        return
+---
 
-    success = 0
+## Install Dependencies
 
-    print(f"Found {len(images)} image(s).\n")
+```bash
+pip install -r requirements.txt
+```
 
-    for index, image in enumerate(images, start=1):
+---
 
-        print(f"[{index}/{len(images)}] {image.name}")
+## Install New Packages
 
-        try:
+```bash
+pip install pillow
+```
 
-            convert_to_webp(image)
+After installing new packages, update `requirements.txt`:
 
-            print("    ✓ Success\n")
+```bash
+pip freeze > requirements.txt
+```
 
-            success += 1
+---
 
-        except Exception as ex:
+## Run
 
-            print(f"    ✗ Failed: {ex}\n")
+```bash
+python to_webp.py
+```
 
-    print("=" * 40)
-    print("Finished")
-    print("=" * 40)
+---
 
-    print(f"Success : {success}")
-    print(f"Failed  : {len(images) - success}")
-    print(f"Output  : {AFTER_DIR.resolve()}")
+## Project Workflow
 
+1. Put images into the `before` folder.
+2. Run the converter.
+3. Converted images will be saved to the `after` folder.
 
-if __name__ == "__main__":
-    main()
+---
+
+## Git
+
+Initialize repository:
+
+```bash
+git init
+```
+
+Add files:
+
+```bash
+git add .
+```
+
+First commit:
+
+```bash
+git commit -m "chore: initialize image converter project"
+```
+
+---
+
+## Roadmap
+
+### v1.0
+
+- [x] JPG → WebP
+- [x] PNG → WebP
+
+### v1.1
+
+- [ ] AI Background Removal
+
+### v1.2
+
+- [ ] WebP → PNG
+
+### v1.3
+
+- [ ] Resize Images
+- [ ] Compress Images
+
+---
+
+## License
+
+MIT

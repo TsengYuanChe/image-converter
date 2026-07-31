@@ -1,12 +1,14 @@
 from pathlib import Path
+import io
 
+import fitz
 from PIL import Image
 
 # ==========================
 # Settings
 # ==========================
 
-SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".pdf"}
 
 # Output WebP quality (0-100)
 # 100 = Highest quality, largest file
@@ -30,7 +32,7 @@ def convert_to_webp(image_path: Path) -> bool:
 
     output_path = AFTER_DIR / f"{image_path.stem}.webp"
 
-    with Image.open(image_path) as image:
+    with open_image(image_path) as image:
         image.save(
             output_path,
             "WEBP",
@@ -40,6 +42,30 @@ def convert_to_webp(image_path: Path) -> bool:
 
     return True
 
+def open_image(path: Path) -> Image.Image:
+    """Open an image or the first page of a PDF."""
+
+    if path.suffix.lower() != ".pdf":
+        return Image.open(path)
+
+    document = fitz.open(path)
+
+    if len(document) != 1:
+        document.close()
+        raise ValueError("Only single-page PDFs are supported.")
+
+    page = document.load_page(0)
+
+    pixmap = page.get_pixmap(
+        dpi=300,
+        alpha=False,
+    )
+
+    image = Image.open(io.BytesIO(pixmap.tobytes("png")))
+
+    document.close()
+
+    return image
 
 def main():
 

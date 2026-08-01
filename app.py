@@ -1,9 +1,6 @@
-import clear_after
-import clear_all
-import clear_before
-import resize
-import to_webp
-import video_thumbnail
+from image import resize, to_webp
+from utilities import clear_after, clear_all, clear_before
+from video import video_thumbnail
 
 
 def show_menu() -> None:

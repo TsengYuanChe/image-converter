@@ -2,19 +2,18 @@ from pathlib import Path
 import shutil
 import subprocess
 
+from common import (
+    AFTER_DIR,
+    BEFORE_DIR,
+    VIDEO_EXTENSIONS,
+    ensure_directories,
+    get_files,
+    print_header,
+)
+
 # ==========================
 # Settings
 # ==========================
-
-SUPPORTED_EXTENSIONS = {
-    ".mp4",
-    ".mov",
-    ".m4v",
-    ".webm",
-}
-
-BEFORE_DIR = Path("before")
-AFTER_DIR = Path("after")
 
 # 擷取影片第幾秒
 THUMBNAIL_TIME = 128.0
@@ -67,24 +66,19 @@ def create_thumbnail(video_path: Path) -> None:
 
 
 def main() -> None:
-    print("=" * 40)
-    print("Image Converter - Video Thumbnail")
-    print("=" * 40)
+    print_header("Image Converter - Video Thumbnail")
 
     if shutil.which("ffmpeg") is None:
         print("FFmpeg is not installed or not available in PATH.")
         print("macOS: brew install ffmpeg")
         return
 
-    BEFORE_DIR.mkdir(exist_ok=True)
-    AFTER_DIR.mkdir(exist_ok=True)
+    ensure_directories()
 
-    videos = [
-        file
-        for file in BEFORE_DIR.iterdir()
-        if file.is_file()
-        and file.suffix.lower() in SUPPORTED_EXTENSIONS
-    ]
+    videos = get_files(
+        BEFORE_DIR,
+        VIDEO_EXTENSIONS,
+    )
 
     if not videos:
         print("No supported video files found.")
@@ -99,6 +93,7 @@ def main() -> None:
 
         try:
             create_thumbnail(video_path)
+
             print(f"    ✓ {video_path.stem}-thumbnail.webp\n")
             success += 1
 
@@ -108,12 +103,11 @@ def main() -> None:
             if error.stderr:
                 print(f"      {error.stderr.strip()}\n")
 
-    print("=" * 40)
-    print("Finished")
-    print("=" * 40)
+    print_header("Finished")
+
     print(f"Success : {success}")
     print(f"Failed  : {len(videos) - success}")
-    print(f"Output  : {AFTER_DIR.resolve()}")
+    print(f"Output  : {AFTER_DIR}")
 
 
 if __name__ == "__main__":

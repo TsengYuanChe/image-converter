@@ -1,13 +1,15 @@
 # Image Converter
 
-A lightweight Python tool for batch image conversion.
+A lightweight Python toolkit for image conversion, resizing, PDF processing, and video thumbnail generation.
 
 ## Features
 
 - Batch convert images to WebP
-- Support JPG, JPEG and PNG
-- Preserve image quality
-- Easy to use with `before/` and `after/` folders
+- Convert single-page PDF to WebP
+- Batch resize images (100%, 50%, 25%, 16%)
+- Generate WebP thumbnails from videos
+- Quickly clear input/output folders
+- Easy to use with an interactive console menu
 
 ---
 
@@ -22,11 +24,24 @@ A lightweight Python tool for batch image conversion.
 ```text
 image-converter/
 │
+├── app.py
+├── common.py
+│
+├── image/
+│   ├── to_webp.py
+│   └── resize.py
+│
+├── video/
+│   └── thumbnail.py
+│
+├── utilities/
+│   ├── clear_before.py
+│   ├── clear_after.py
+│   └── clear_all.py
+│
 ├── before/
 ├── after/
 │
-├── common.py
-├── to_webp.py
 ├── requirements.txt
 ├── README.md
 └── .gitignore
@@ -55,38 +70,45 @@ source .venv/bin/activate
 ## Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ---
 
 ## Install New Packages
 
+Example:
+
 ```bash
-pip install pillow
+python -m pip install pillow
 ```
 
-After installing new packages, update `requirements.txt`:
+Update `requirements.txt` after installing new packages:
 
 ```bash
-pip freeze > requirements.txt
+python -m pip freeze > requirements.txt
 ```
 
 ---
 
 ## Run
 
+Launch the application:
+
 ```bash
-python to_webp.py
+python app.py
 ```
+
+Select a tool from the interactive menu.
 
 ---
 
 ## Project Workflow
 
-1. Put images into the `before` folder.
-2. Run the converter.
-3. Converted images will be saved to the `after` folder.
+1. Put your files into the `before` folder.
+2. Launch the application.
+3. Select the desired tool.
+4. Processed files will be saved to the `after` folder.
 
 ---
 
@@ -118,6 +140,10 @@ git commit -m "chore: initialize image converter project"
 
 - [x] JPG → WebP
 - [x] PNG → WebP
+- [x] Single-page PDF → WebP
+- [x] Batch image resize
+- [x] Video thumbnail generator
+- [x] Interactive console menu
 
 ### v1.1
 
@@ -126,11 +152,14 @@ git commit -m "chore: initialize image converter project"
 ### v1.2
 
 - [ ] WebP → PNG
+- [ ] HEIC → WebP
+- [ ] AVIF support
 
 ### v1.3
 
-- [ ] Resize Images
-- [ ] Compress Images
+- [ ] Image compression
+- [ ] Batch rename
+- [ ] Metadata viewer
 
 ---
 
